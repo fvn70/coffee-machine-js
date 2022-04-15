@@ -3,23 +3,50 @@
 // You will need this in the following stages
 const input = require('sync-input');
 
-let aWater = 200;
-let aMilk = 50;
-let aBeans = 15;
+let cm = {'water': 400, 'milk': 540, 'beans': 120, 'cups': 9, 'sum': 550};
+let kinds = [{'water': 250, 'milk': 0, 'beans': 16, 'cost': 4},
+    {'water': 350, 'milk': 75, 'beans': 20, 'cost': 7},
+    {'water': 200, 'milk': 100, 'beans': 12, 'cost': 6}];
 
-let water = input("Write how many ml of water the coffee machine has:\n");
-let milk = input("Write how many ml of milk the coffee machine has:\n");
-let beans = input("Write how many grams of coffee beans the coffee machine has:\n");
-let cups = input("Write how many cups of coffee you will need:\n");
-
-let num = Math.floor(Math.min(water / aWater, milk / aMilk, beans / aBeans));
-
-if (num < cups) {
-    console.log(`No, I can make only ${num} cups of coffee`);
-} else {
-    if (num > cups) {
-        console.log(`Yes, I can make that amount of coffee (and even ${num - cups} more than that)`);
-    } else {
-        console.log(`Yes, I can make that amount of coffee`);
-    }
+function state() {
+    console.log(`\nThe coffee machine has:
+${cm.water} ml of water
+${cm.milk} ml of milk
+${cm.beans} g of coffee beans
+${cm.cups} disposable cups
+$${cm.sum} of money\n`);
 }
+
+function buy() {
+    let kind = input("\nWhat do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino:\n") - 1;
+    cm.water -= kinds[kind].water;
+    cm.milk -= kinds[kind].milk;
+    cm.beans -= kinds[kind].beans;
+    cm.sum += kinds[kind].cost;
+    cm.cups -= 1;
+}
+
+function fill() {
+    cm.water += parseInt(input("Write how many ml of water you want to add:\n"));
+    cm.milk += parseInt(input("Write how many ml of milk you want to add:\n"));
+    cm.beans += parseInt(input("Write how many grams of coffee beans you want to add:\n"));
+    cm.cups += parseInt(input("Write how many disposable coffee cups you want to add:\n"));
+}
+
+function take() {
+    console.log(`I gave you ${cm.sum}\n`);
+    cm.sum = 0;
+}
+
+state();
+let cmd = input(`\nWrite action (buy, fill, take):\n`);
+if (cmd === 'buy') {
+    buy();
+}
+if (cmd === 'fill') {
+    fill();
+}
+if (cmd === 'take') {
+    take();
+}
+state();
