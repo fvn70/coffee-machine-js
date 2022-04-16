@@ -17,13 +17,23 @@ ${cm.cups} disposable cups
 $${cm.sum} of money\n`);
 }
 
-function buy() {
-    let kind = input("\nWhat do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino:\n") - 1;
-    cm.water -= kinds[kind].water;
-    cm.milk -= kinds[kind].milk;
-    cm.beans -= kinds[kind].beans;
-    cm.sum += kinds[kind].cost;
-    cm.cups -= 1;
+function buy(kind) {
+    if (cm.water < kinds[kind].water) {
+        console.log("Sorry, not enough water!");
+    } else if (cm.milk < kinds[kind].milk) {
+        console.log("Sorry, not enough milk!");
+    } else if (cm.beans < kinds[kind].beans) {
+        console.log("Sorry, not enough beans!");
+    } else if (cm.cups < 1) {
+        console.log("Sorry, not enough cups!");
+    } else {
+        console.log("I have enough resources, making you a coffee!");
+        cm.water -= kinds[kind].water;
+        cm.milk -= kinds[kind].milk;
+        cm.beans -= kinds[kind].beans;
+        cm.sum += kinds[kind].cost;
+        cm.cups -= 1;
+    }
 }
 
 function fill() {
@@ -34,19 +44,37 @@ function fill() {
 }
 
 function take() {
-    console.log(`I gave you ${cm.sum}\n`);
+    console.log(`I gave you $${cm.sum}\n`);
     cm.sum = 0;
 }
 
-state();
-let cmd = input(`\nWrite action (buy, fill, take):\n`);
-if (cmd === 'buy') {
-    buy();
+function read_cmd(cmd) {
+    switch (cmd) {
+        case "fill":
+            fill();
+            break;
+        case "take":
+            take();
+            break;
+        case "remaining":
+            state();
+            break;
+        default:
+            return;
+    }
 }
-if (cmd === 'fill') {
-    fill();
+
+while (true) {
+    let cmd = input("\nWrite action (buy, fill, take, remaining, exit):\n");
+    if (cmd === 'exit') {
+        break;
+    }
+    if (cmd === 'buy') {
+        let cmd2 = input("\nWhat do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino, back - to main menu: \n");
+        if (cmd2 !== 'back') {
+            buy(parseInt(cmd2) - 1);
+        }
+    } else {
+        read_cmd(cmd)
+    }
 }
-if (cmd === 'take') {
-    take();
-}
-state();
