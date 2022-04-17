@@ -18,21 +18,22 @@ $${cm.sum} of money\n`);
 }
 
 function buy(kind) {
-    if (cm.water < kinds[kind].water) {
+    let number = parseInt(input("Write how many cups of coffee you need:\n"));
+    if (cm.water < kinds[kind].water * number) {
         console.log("Sorry, not enough water!");
-    } else if (cm.milk < kinds[kind].milk) {
+    } else if (cm.milk < kinds[kind].milk * number) {
         console.log("Sorry, not enough milk!");
-    } else if (cm.beans < kinds[kind].beans) {
+    } else if (cm.beans < kinds[kind].beans * number) {
         console.log("Sorry, not enough beans!");
-    } else if (cm.cups < 1) {
+    } else if (cm.cups < number) {
         console.log("Sorry, not enough cups!");
     } else {
         console.log("I have enough resources, making you a coffee!");
-        cm.water -= kinds[kind].water;
-        cm.milk -= kinds[kind].milk;
-        cm.beans -= kinds[kind].beans;
-        cm.sum += kinds[kind].cost;
-        cm.cups -= 1;
+        cm.water -= kinds[kind].water * number;
+        cm.milk -= kinds[kind].milk * number;
+        cm.beans -= kinds[kind].beans * number;
+        cm.sum += kinds[kind].cost * number;
+        cm.cups -= number;
     }
 }
 
